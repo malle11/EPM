@@ -13,7 +13,7 @@ set -euo pipefail
 DB_NAME="epm_db"
 DB_USER="epm_user"
 DB_PASS="EpM_2026_Seguro"
-REPO_URL="https://github.com/TU_USUARIO/EPM.git"
+REPO_URL="https://github.com/malle11/EPM.git"
 APP_DIR="/var/www/epm"
 APP_USER="www-data"
 SECRET_KEY="$(head -c 48 /dev/urandom | base64)"

@@ -1,6 +1,6 @@
 -- ============================================================
 -- EPM - Enterprise Project Management
--- Base de datos MySQL - Luz Mallely / Sara Guisao
+-- Base de datos MySQL - Luz Mallely Zapata
 -- ============================================================
 
 DROP DATABASE IF EXISTS epm_db;

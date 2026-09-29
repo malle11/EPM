@@ -3,7 +3,7 @@
 Aplicacion web de gestion de proyectos enterprise, desarrollada con **Python (Flask)** y **MySQL**,
 para la Actividad 2 - Deploy manual + Marketplace (ITM 2026).
 
-**Autoras:** Luz Mallely Zapata y Sara Guisao
+**Autora:** Luz Mallely Zapata
 
 ---
 

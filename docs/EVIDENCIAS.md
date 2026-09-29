@@ -67,7 +67,7 @@ Demuestra la app en uso y las operaciones administrativas sobre la base de datos
 
 ## Estructura sugerida del PDF final
 
-1. Portada: materia, nombre del trabajo, autoras, fecha.
+1. Portada: materia, nombre del trabajo, autora, fecha.
 2. Contexto: que es la actividad y que se hizo.
 3. Infraestructura creada (Grupo A).
 4. Configuracion de la aplicacion (Grupo B).
