@@ -96,7 +96,7 @@ INSERT INTO roles (id, nombre) VALUES
 INSERT INTO usuarios (nombre, email, password, rol_id, cargo) VALUES
     ('Luz Mallely Zapata', 'admin@epm.com',
      '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 1, 'Administradora del sistema'),
-    ('Sara Guisao', 'sara@epm.com',
+    ('Malle', 'malle@epm.com',
      '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 2, 'Analista de proyectos'),
     ('Carlos Ramirez', 'carlos@epm.com',
      '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 2, 'Desarrollador');

@@ -87,7 +87,7 @@ Abrir <http://127.0.0.1:5000>
 | Rol | Correo | Contrasena |
 |---|---|---|
 | Administrador | `admin@epm.com` | `admin123` |
-| Usuario | `sara@epm.com` | `admin123` |
+| Usuario | `malle@epm.com` | `admin123` |
 | Usuario | `carlos@epm.com` | `admin123` |
 
 ## 7. Despliegue en la nube

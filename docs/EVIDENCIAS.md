@@ -43,7 +43,7 @@ Demuestra la gestion de **usuarios, roles y permisos** desde la interfaz.
 | B5 | Cambio de rol | Formulario "Cambiar rol" -> seleccionar **ADMINISTRADOR** -> enviar |
 | B6 | Activar / desactivar un usuario | Boton "Desactivar" -> la etiqueta pasa a INACTIVO |
 | B7 | Reinicio de contrasena | Boton "Reiniciar contrasena" -> la alerta muestra la nueva |
-| B8 | Proteccion de rutas: un USUARIO no entra al admin | Iniciar sesion con `sara@epm.com` y entrar a `/admin/usuarios` |
+| B8 | Proteccion de rutas: un USUARIO no entra al admin | Iniciar sesion con `malle@epm.com` y entrar a `/admin/usuarios` |
 
 ---
 
