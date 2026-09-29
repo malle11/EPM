@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block titulo %}Proyectos{% endblock %}
+{% block contenido %}
+
+<h1>Proyectos</h1>
+{% if es_admin %}<a class="boton" href="{{ url_for('admin.nuevo_proyecto') }}">+ Crear proyecto</a>{% endif %}
+
+<div class="rejilla">
+  {% for p in proyectos %}
+  <div class="tarjeta">
+    <span class="codigo">{{ p.codigo }}</span>
+    <h3><a href="{{ url_for('main.proyecto_detalle', proyecto_id=p.id) }}">{{ p.nombre }}</a></h3>
+    <p class="pequeno">{{ p.descripcion }}</p>
+    <p><span class="estado {{ p.estado|lower }}">{{ p.estado }}</span></p>
+    <div class="barra-progreso"><div class="relleno" style="width: {{ p.avance }}%"></div></div>
+    <p class="pequeno">Avance {{ p.avance }}% ({{ p.tareas_ok }}/{{ p.total_tareas }} tareas)</p>
+    <p class="pequeno">Presupuesto: $ {{ '{:,.0f}'.format(p.presupuesto) }}<br>
+       Inicio {{ p.fecha_inicio }} &middot; Fin {{ p.fecha_fin }}<br>
+       Autor: {{ p.autor }}</p>
+    {% if es_admin %}
+    <form method="post" action="{{ url_for('admin.cambiar_estado_proyecto', proyecto_id=p.id) }}">
+      <select name="estado">
+        {% for e in ['PLANIFICACION','EN_CURSO','PAUSADO','FINALIZADO'] %}
+        <option value="{{ e }}" {% if e == p.estado %}selected{% endif %}>{{ e }}</option>
+        {% endfor %}
+      </select>
+      <button class="chico">Cambiar estado</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

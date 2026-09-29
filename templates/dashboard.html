@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block titulo %}Panel{% endblock %}
+{% block contenido %}
+
+<h1>Panel de control</h1>
+<p class="subtitulo">Resumen de {{ 'toda la organizacion' if es_admin else 'mis actividades' }} - hoy {{ hoy }}</p>
+
+<div class="tarjetas">
+  <div class="kpi"><span class="kpi-num">{{ resumen.total_proyectos }}</span><span class="kpi-txt">Proyectos</span></div>
+  <div class="kpi verde"><span class="kpi-num">{{ resumen.en_curso }}</span><span class="kpi-txt">En curso</span></div>
+  <div class="kpi"><span class="kpi-num">{{ resumen.finalizados }}</span><span class="kpi-txt">Finalizados</span></div>
+  <div class="kpi azul"><span class="kpi-num">{{ resumen.tareas_ok }}/{{ resumen.total_tareas }}</span><span class="kpi-txt">Tareas completadas</span></div>
+  <div class="kpi"><span class="kpi-num">$ {{ '{:,.0f}'.format(resumen.presupuesto_total) }}</span><span class="kpi-txt">Presupuesto total</span></div>
+  {% if es_admin %}<div class="kpi morado"><span class="kpi-num">{{ resumen.usuarios_activos }}</span><span class="kpi-txt">Usuarios activos</span></div>{% endif %}
+</div>
+
+<h2>Indicadores de gestion</h2>
+<div class="rejilla">
+  {% for i in indicadores %}
+  <div class="tarjeta">
+    <h3>{{ i.nombre }}</h3>
+    <p class="pequeno">{{ i.proyecto }}</p>
+    <div class="barra-progreso"><div class="relleno" style="width: {{ i.avance }}%"></div></div>
+    <p><strong>{{ i.avance }}%</strong> <span class="pequeno">(meta {{ i.meta }}%)</span></p>
+    <code class="formula">{{ i.formula }}</code>
+  </div>
+  {% endfor %}
+</div>
+
+<h2>{{ 'Tareas del equipo' if es_admin else 'Mis tareas' }}</h2>
+<table>
+  <thead><tr><th>Tarea</th><th>Proyecto</th><th>Responsable</th><th>Prioridad</th><th>Estado</th><th>Accion</th></tr></thead>
+  <tbody>
+  {% for t in tareas %}
+    <tr>
+      <td>{{ t.titulo }}</td>
+      <td>{{ t.proyecto }}</td>
+      <td>{{ t.responsable or 'Sin asignar' }}</td>
+      <td><span class="prio {{ t.prioridad|lower }}">{{ t.prioridad }}</span></td>
+      <td><span class="estado {{ t.estado|lower }}">{{ t.estado }}</span></td>
+      <td>
+        <form method="post" action="{{ url_for('main.cambiar_estado', tarea_id=t.id) }}" class="en-linea">
+          <select name="estado">
+            {% for e in ['PENDIENTE','EN_PROGRESO','BLOQUEADA','COMPLETADA'] %}
+            <option value="{{ e }}" {% if e == t.estado %}selected{% endif %}>{{ e }}</option>
+            {% endfor %}
+          </select>
+          <button class="chico">Actualizar</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6">No hay tareas para mostrar.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

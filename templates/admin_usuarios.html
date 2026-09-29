@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block titulo %}Administrar usuarios{% endblock %}
+{% block contenido %}
+
+<h1>Administracion de usuarios</h1>
+<p class="subtitulo">Crear cuentas, asignar roles, activar o desactivar y reiniciar contrasenas.</p>
+
+<div class="caja">
+  <h3>Crear usuario</h3>
+  <form method="post" action="{{ url_for('admin.crear_usuario') }}" class="fila">
+    <input type="text" name="nombre" placeholder="Nombre completo" required>
+    <input type="email" name="email" placeholder="correo@epm.com" required>
+    <input type="text" name="cargo" placeholder="Cargo">
+    <select name="rol_id">
+      {% for r in roles %}<option value="{{ r.id }}">{{ r.nombre }}</option>{% endfor %}
+    </select>
+    <input type="text" name="password" placeholder="Contrasena (vacia = automatica)">
+    <button>Crear usuario</button>
+  </form>
+</div>
+
+<table>
+  <thead><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Cargo</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+  <tbody>
+  {% for u in usuarios %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.nombre }}{% if u.id == usuario.id %} <span class="pequeno">(tu)</span>{% endif %}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.cargo or '-' }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin.cambiar_rol', usuario_id=u.id) }}" class="en-linea">
+          <select name="rol_id">
+            {% for r in roles %}
+            <option value="{{ r.id }}" {% if r.nombre == u.rol %}selected{% endif %}>{{ r.nombre }}</option>
+            {% endfor %}
+          </select>
+          <button class="chico">Cambiar rol</button>
+        </form>
+      </td>
+      <td><span class="estado {{ 'completada' if u.activo else 'bloqueada' }}">{{ 'ACTIVO' if u.activo else 'INACTIVO' }}</span></td>
+      <td>
+        <form method="post" action="{{ url_for('admin.activar_desactivar', usuario_id=u.id) }}" class="en-linea">
+          <button class="chico">{{ 'Desactivar' if u.activo else 'Activar' }}</button>
+        </form>
+        <form method="post" action="{{ url_for('admin.reiniciar_password', usuario_id=u.id) }}" class="en-linea">
+          <button class="chico secundario">Reiniciar contrasena</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<p><a href="{{ url_for('admin.bitacora') }}">Ver bitacora de transacciones &rarr;</a></p>
+{% endblock %}

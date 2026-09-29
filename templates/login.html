@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesion - EPM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="centrado">
+  <div class="tarjeta-login">
+    <div class="encabezado-login">
+      <span class="logo grande">EPM</span>
+      <h1>Enterprise Project Management</h1>
+      <p>Gestion de proyectos enterprise</p>
+    </div>
+
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+      {% for categoria, texto in mensajes %}
+        <div class="alerta {{ categoria }}">{{ texto }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('auth.login') }}">
+      <label>Correo electronico</label>
+      <input type="email" name="email" required autofocus placeholder="usuario@epm.com">
+
+      <label>Contrasena</label>
+      <input type="password" name="password" required placeholder="********">
+
+      <button type="submit">Iniciar sesion</button>
+    </form>
+
+    <div class="demo">
+      <strong>Cuentas de prueba</strong>
+      <div>Administrador: <code>admin@epm.com</code></div>
+      <div>Usuario: <code>sara@epm.com</code></div>
+      <div>Contrasena: <code>admin123</code></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Error {{ codigo }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body class="centrado">
+  <div class="tarjeta-login">
+    <span class="logo grande">EPM</span>
+    <h1>Error {{ codigo }}</h1>
+    <p>{{ mensaje }}</p>
+    <a class="boton" href="{{ url_for('auth.login') }}">Volver al inicio</a>
+  </div>
+</body>
+</html>

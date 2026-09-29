@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}EPM{% endblock %} - Enterprise Project Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="barra">
+  <div class="marca">
+    <span class="logo">EPM</span>
+    <span>Enterprise Project Management</span>
+  </div>
+  {% if usuario %}
+  <nav>
+    <a href="{{ url_for('main.dashboard') }}">Panel</a>
+    <a href="{{ url_for('main.proyectos') }}">Proyectos</a>
+    {% if es_admin %}
+    <a href="{{ url_for('admin.usuarios') }}">Usuarios</a>
+    <a href="{{ url_for('admin.nuevo_proyecto') }}">Nuevo proyecto</a>
+    <a href="{{ url_for('admin.bitacora') }}">Bitacora</a>
+    {% endif %}
+  </nav>
+  <div class="sesion">
+    <span class="etiqueta {{ 'admin' if es_admin else 'usuario' }}">{{ usuario.rol }}</span>
+    <span>{{ usuario.nombre }}</span>
+    <a class="salir" href="{{ url_for('auth.logout') }}">Salir</a>
+  </div>
+  {% endif %}
+</header>
+
+<main>
+  {% with mensajes = get_flashed_messages(with_categories=true) %}
+    {% if mensajes %}
+      {% for categoria, texto in mensajes %}
+        <div class="alerta {{ categoria }}">{{ texto }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block contenido %}{% endblock %}
+</main>
+
+<footer>EPM - Proyecto degestion de proyectos | ITM 2026 | Mallely</footer>
+</body>
+</html>

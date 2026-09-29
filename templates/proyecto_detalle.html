@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block titulo %}{{ p.codigo }}{% endblock %}
+{% block contenido %}
+
+<h1>{{ p.nombre }} <span class="codigo">{{ p.codigo }}</span></h1>
+<p class="subtitulo">{{ p.descripcion }}</p>
+<p><span class="estado {{ p.estado|lower }}">{{ p.estado }}</span>
+   &middot; Autor: {{ p.autor }}
+   &middot; {{ p.fecha_inicio }} a {{ p.fecha_fin }}
+   &middot; $ {{ '{:,.0f}'.format(p.presupuesto) }}</p>
+
+<h2>Tareas del proyecto</h2>
+{% if es_admin %}
+<div class="caja">
+  <h3>Asignar nueva tarea</h3>
+  <form method="post" action="{{ url_for('admin.nueva_tarea') }}" class="fila">
+    <input type="hidden" name="proyecto_id" value="{{ p.id }}">
+    <input type="text" name="titulo" placeholder="Titulo de la tarea" required>
+    <select name="asignado_a">
+      <option value="">Sin asignar</option>
+      {% for u in usuarios %}
+      <option value="{{ u.id }}">{{ u.nombre }}</option>
+      {% endfor %}
+    </select>
+    <select name="prioridad">
+      <option>BAJA</option><option selected>MEDIA</option><option>ALTA</option>
+    </select>
+    <input type="date" name="fecha_limite">
+    <button class="chico">Asignar</button>
+  </form>
+</div>
+{% endif %}
+
+<table>
+  <thead><tr><th>#</th><th>Tarea</th><th>Responsable</th><th>Prioridad</th><th>Vence</th><th>Estado</th></tr></thead>
+  <tbody>
+  {% for t in tareas %}
+    <tr>
+      <td>{{ t.id }}</td>
+      <td>{{ t.titulo }}<div class="pequeno">{{ t.descripcion }}</div></td>
+      <td>{{ t.responsable or 'Sin asignar' }}</td>
+      <td><span class="prio {{ t.prioridad|lower }}">{{ t.prioridad }}</span></td>
+      <td>{{ t.fecha_limite or '-' }}</td>
+      <td><span class="estado {{ t.estado|lower }}">{{ t.estado }}</span></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="6">Este proyecto aun no tiene tareas.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<p><a href="{{ url_for('main.proyectos') }}">&larr; Volver a proyectos</a></p>
+{% endblock %}

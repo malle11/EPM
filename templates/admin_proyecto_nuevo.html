@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block titulo %}Nuevo proyecto{% endblock %}
+{% block contenido %}
+
+<h1>Crear proyecto</h1>
+<form method="post" action="{{ url_for('admin.nuevo_proyecto') }}" class="caja">
+  <label>Codigo del proyecto</label>
+  <input type="text" name="codigo" placeholder="EPM-004" required>
+
+  <label>Nombre</label>
+  <input type="text" name="nombre" required>
+
+  <label>Descripcion</label>
+  <textarea name="descripcion" rows="4"></textarea>
+
+  <div class="fila">
+    <div><label>Fecha inicio</label><input type="date" name="fecha_inicio"></div>
+    <div><label>Fecha fin</label><input type="date" name="fecha_fin"></div>
+    <div><label>Presupuesto</label><input type="number" name="presupuesto" min="0" step="0.01" value="0"></div>
+  </div>
+
+  <button type="submit">Guardar proyecto</button>
+  <a class="boton secundario" href="{{ url_for('main.proyectos') }}">Cancelar</a>
+</form>
+
+{% endblock %}
