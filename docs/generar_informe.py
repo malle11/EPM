@@ -109,7 +109,7 @@ parrafo(
     "Management). La solución se desarrolla con Python mediante el microframework Flask, y persiste "
     "sus datos en un servidor MySQL. El despliegue se ejecuta sobre una máquina virtual Ubuntu "
     "en infraestructura de nube pública, empleando Apache HTTP Server con el módulo mod_wsgi "
-    "como servidor de aplicaciones y Gunicorn como servidor WSGI, sin hacer uso de contenedores "
+    "como servidor de aplicaciones a través de la interfaz WSGI, sin hacer uso de contenedores "
     "Docker, conforme a las restricciones de la actividad. La aplicación implementa un modelo de "
     "seguridad basado en roles que distingue entre usuarios administrativos y usuarios operativos, "
     "con registro de auditoría de todas las transacciones administrativas. El proceso se automatiza "
@@ -307,7 +307,7 @@ filas = [
     ("Framework web", "Flask 3", "Ligero y modular; ideal para aprender la arquitectura web."),
     ("Estándar de despliegue", "WSGI (PEP 3333)", "Interfaz estándar entre servidor y aplicación."),
     ("Servidor web", "Apache 2 + mod_wsgi", "Estabilidad y control de procesos."),
-    ("Servidor WSGI", "Gunicorn", "Recomendado por Flask para producción."),
+    ("Servidor WSGI", "mod_wsgi", "Proceso WSGI administrado por el propio Apache."),
     ("Base de datos", "MySQL 8", "Motor InnoDB, transacciones y robustez."),
     ("Conector", "mysql-connector-python", "Driver oficial de Oracle."),
     ("Sistema operativo", "Ubuntu 22.04 / 24.04 LTS", "Soporte prolongado y documentación abundante."),
@@ -603,7 +603,8 @@ parrafo(
 
 titulo("6.1 Principios de diseño del script", 2)
 for p in [
-    "Idempotencia: el script puede ejecutarse varias veces sin producir efectos adversos.",
+    "Reejecución segura: si el servidor ya tiene el código, el script lo actualiza con git pull "
+    "y conserva los datos de la base de datos; solo la recrea cuando se invoca con RESET_DB=1.",
     "Detección de privilegios: verifica la ejecución como root y detiene el proceso si no es así.",
     "Trazabilidad: cada etapa se anuncia con un mensaje numerado que identifica el progreso.",
     "Parametrización: los datos de conexión y credenciales se declaran al inicio del archivo.",
@@ -620,16 +621,18 @@ codigo([
 ])
 
 titulo("6.3 Etapas del proceso automatizado", 2)
-parrafo("El script ejecuta las siguientes ocho etapas:")
+parrafo("El script ejecuta las siguientes ocho etapas, seguidas de la apertura del firewall y una comprobación final:")
 codigo([
     "Paso 1/8   Actualizar el sistema",
-    "Paso 2/8   Instalar Apache, MySQL, Python y Git",
-    "Paso 3/8   Descargar el código desde el repositorio",
-    "Paso 4/8   Crear entorno virtual e instalar dependencias",
+    "Paso 2/8   Instalar Apache, MySQL, Python, mod_wsgi y Git",
+    "Paso 3/8   Obtener el código (git clone la primera vez, git pull después)",
+    "Paso 4/8   Crear el entorno virtual e instalar las dependencias",
     "Paso 5/8   Crear la base de datos y el usuario de aplicación",
-    "Paso 6/8   Cargar el esquema y los datos iniciales",
-    "Paso 7/8   Generar el archivo de variables de entorno",
-    "Paso 8/8   Configurar Apache con mod_wsgi y activar el firewall",
+    "Paso 6/8   Escribir la configuración en .env con permisos 640",
+    "Paso 7/8   Configurar Apache con mod_wsgi",
+    "Paso 8/8   Validar con apache2ctl configtest y reiniciar Apache",
+    "Extra      Abrir los puertos 22 y 80 en ufw",
+    "Extra      Verificar que /login responde HTTP 200",
 ])
 
 titulo("6.4 Actualizaciones posteriores", 2)
@@ -641,6 +644,17 @@ codigo([
     "cd /var/www/epm",
     "sudo -u www-data git pull origin main",
     "sudo systemctl restart apache2",
+])
+
+parrafo(
+    "El propio script puede encargarse de esta actualización, ya que detecta si el código ya "
+    "existe en el servidor:"
+)
+codigo([
+    "cd /var/www/epm",
+    "sudo bash deploy/deploy.sh",
+    "# y, solo si se quiere reiniciar la base de datos:",
+    "RESET_DB=1 sudo bash deploy/deploy.sh",
 ])
 
 doc.add_page_break()
