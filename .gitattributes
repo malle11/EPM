@@ -1,0 +1,10 @@
+# Los archivos .sh se ejecutan en Linux: deben conservar LF.
+# Si alguien los edita en Windows, git no debe convertirlos a CRLF,
+# porque un shebang con \r produce "bad interpreter" en el servidor.
+* text=auto
+
+*.sh    text eol=lf
+*.sql   text eol=lf
+*.py    text eol=lf
+*.html  text eol=lf
+*.css   text eol=lf
